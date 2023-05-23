@@ -16,6 +16,7 @@
                     @if ($project->type_id)
                         <h2>Type: {{ $project->type->name }}</h2>
                     @endif
+                    <p>Tipologia: {{ $project->type?->nome ?: 'No technologies in this project' }}</p>
                     <p>{{ $project->creation_date }}</p>
                 </div>
             </div>
