@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -30,7 +31,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types','technologies'));
     }
 
     /**
@@ -50,6 +52,9 @@ class ProjectController extends Controller
         $new_project->description = $data['description'];
         $new_project->slug =  Str::slug($new_project->project_title, '-');
         $new_project->save();
+        if(isset($data['technologies'])){
+            $new_project->technologies()->sync($data['technologies']);
+        }
 
         return redirect()->route('admin.projects.index');
     }
@@ -74,6 +79,7 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
+        $technologies = Technology::all();
         return view('admin.projects.edit', compact('project', 'types'));
     }
 
